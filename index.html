@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kişisel Antrenman & Takip Paneli</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --success: #22c55e;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+        }
+
+        header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Sekmeler */
+        .day-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .day-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 10px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .day-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-main);
+        }
+
+        .day-btn.active {
+            background-color: var(--accent);
+            color: #0f172a;
+            border-color: var(--accent);
+        }
+
+        /* Dinlenme Sayacı */
+        .timer-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .timer-info span {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .timer-display {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .timer-buttons button {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-left: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .timer-buttons button:hover {
+            background-color: var(--accent-hover);
+            color: #fff;
+        }
+
+        /* Egzersiz Kartları */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .card-header h3 {
+            font-size: 1.1rem;
+        }
+
+        .badge {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .instructions {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        /* Set Takip Kutuları */
+        .sets-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .set-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: rgba(15, 23, 42, 0.6);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .set-item input {
+            accent-color: var(--success);
+            cursor: pointer;
+        }
+
+        /* Dinlenme Günleri Paneli */
+        .rest-box {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .rest-box h2 {
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .rest-box p {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto 20px auto;
+            line-height: 1.6;
+        }
+
+        .checklist {
+            list-style: none;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .checklist li {
+            padding: 8px 12px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Antrenman & İlerleme Takibi</h1>
+        <p>105 kg Başlangıç | Kas Koruma ve Ödem Atma Programı</p>
+    </header>
+
+    <!-- Gün Seçimi Butonları -->
+    <div class="day-nav">
+        <button class="day-btn active" onclick="switchDay(1)">1. Gün (Pzt)</button>
+        <button class="day-btn" onclick="switchDay(2)">2. Gün (Salı)</button>
+        <button class="day-btn" onclick="switchDay(3)">3. Gün (Çar)</button>
+        <button class="day-btn" onclick="switchDay(4)">4. Gün (Per)</button>
+        <button class="day-btn" onclick="switchDay(5)">5. Gün (Cum)</button>
+        <button class="day-btn" onclick="switchDay(6)">Hafta Sonu</button>
+    </div>
+
+    <!-- Set Arası Zamanlayıcı -->
+    <div class="timer-card" id="timerSection">
+        <div class="timer-info">
+            <span>Set Arası Dinlenme</span>
+            <div class="timer-display" id="timeDisplay">00:00</div>
+        </div>
+        <div class="timer-buttons">
+            <button onclick="startTimer(60)">60 sn</button>
+            <button onclick="startTimer(90)">90 sn</button>
+            <button onclick="stopTimer()">Durdur</button>
+        </div>
+    </div>
+
+    <!-- Antrenman Günleri İçeriği -->
+    <div id="workoutContent">
+        <!-- Egzersiz 1 -->
+        <div class="card">
+            <div class="card-header">
+                <h3>1. Masa / Koltuk Şınavı</h3>
+                <span class="badge">3 Set x 8–10 Tekrar</span>
+            </div>
+            <div class="instructions">
+                Ellerini sabit bir masa veya koltuk kenarına omuz genişliğinde koy. Vücudunu topuktan başa kadar düz tut. Göğsünü yüzeye yaklaştırıp kontrollü it.
+            </div>
+            <div class="sets-container">
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 1. Set</label>
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 2. Set</label>
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 3. Set</label>
+            </div>
+        </div>
+
+        <!-- Egzersiz 2 -->
+        <div class="card">
+            <div class="card-header">
+                <h3>2. Sandalyeye Oturup Kalkma (Box Squat)</h3>
+                <span class="badge">3 Set x 10–12 Tekrar</span>
+            </div>
+            <div class="instructions">
+                Arkana sandalye al. Ayaklar omuz genişliğinde açık. Kalçanı sandalyeye hafifçe değdirip kontrollü ayağa kalk. Dizlerini içe bükme.
+            </div>
+            <div class="sets-container">
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 1. Set</label>
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 2. Set</label>
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 3. Set</label>
+            </div>
+        </div>
+
+        <!-- Egzersiz 3 -->
+        <div class="card">
+            <div class="card-header">
+                <h3>3. Kapı Eşiğinde Çekiş (Doorframe Row)</h3>
+                <span class="badge">3 Set x 10 Tekrar</span>
+            </div>
+            <div class="instructions">
+                Kapı pervazını iki elinle tut, ayaklarını yaklaştır ve geriye yaslan. Sırtını ve pazularını sıkarak göğsünü pervaza doğru çek.
+            </div>
+            <div class="sets-container">
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 1. Set</label>
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 2. Set</label>
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 3. Set</label>
+            </div>
+        </div>
+
+        <!-- Egzersiz 4 -->
+        <div class="card">
+            <div class="card-header">
+                <h3>4. Köprü Hareketi (Glute Bridge)</h3>
+                <span class="badge">3 Set x 12 Tekrar</span>
+            </div>
+            <div class="instructions">
+                Sırtüstü uzan, dizlerini büküp ayak tabanlarını yere bas. Topuklardan güç alarak kalçanı yukarı kaldır, tepe noktada kalçanı 1 saniye sık ve indir.
+            </div>
+            <div class="sets-container">
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 1. Set</label>
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 2. Set</label>
+                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 3. Set</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dinlenme Günü İçeriği -->
+    <div id="restContent" style="display: none;">
+        <div class="card rest-box">
+            <h2>Aktif Dinlenme ve Toparlanma Günü</h2>
+            <p>Bugün kasların onarılıyor ve güçleniyor. Ağır egzersiz yok, ancak vücuttaki dolaşımı ve ödem atımını sürdürmek için hedeflerini tamamla.</p>
+            <ul class="checklist">
+                <li>👟 8.000 – 10.000 adım tamamla</li>
+                <li>💧 En az 3 – 3.5 litre su iç</li>
+                <li>🍗 120 – 140 gram protein hedefine ulaş</li>
+                <li>😴 7 – 8 saat kaliteli gece uykusu</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentDay = 1;
+    let timerInterval = null;
+
+    function switchDay(day) {
+        currentDay = day;
+        
+        // Buton stillerini güncelle
+        const buttons = document.querySelectorAll('.day-btn');
+        buttons.forEach((btn, index) => {
+            btn.classList.toggle('active', index + 1 === day);
+        });
+
+        // Antrenman günleri: 1 (Pzt), 3 (Çar), 5 (Cum)
+        const isWorkoutDay = (day === 1 || day === 3 || day === 5);
+        document.getElementById('workoutContent').style.display = isWorkoutDay ? 'block' : 'none';
+        document.getElementById('timerSection').style.display = isWorkoutDay ? 'flex' : 'none';
+        document.getElementById('restContent').style.display = isWorkoutDay ? 'none' : 'block';
+
+        loadProgress();
+    }
+
+    // Set takibini LocalStorage üzerinde tutma
+    function saveProgress() {
+        const checkboxes = document.querySelectorAll('#workoutContent input[type="checkbox"]');
+        const state = Array.from(checkboxes).map(cb => cb.checked);
+        localStorage.setItem('workout_day_' + currentDay, JSON.stringify(state));
+    }
+
+    function loadProgress() {
+        const checkboxes = document.querySelectorAll('#workoutContent input[type="checkbox"]');
+        const saved = JSON.parse(localStorage.getItem('workout_day_' + currentDay) || '[]');
+        checkboxes.forEach((cb, index) => {
+            cb.checked = saved[index] || false;
+        });
+    }
+
+    // Sayaç fonksiyonları
+    function startTimer(seconds) {
+        clearInterval(timerInterval);
+        let remain = seconds;
+        updateTimerDisplay(remain);
+
+        timerInterval = setInterval(() => {
+            remain--;
+            if (remain <= 0) {
+                clearInterval(timerInterval);
+                updateTimerDisplay(0);
+                alert("Dinlenme süresi bitti! Sıradaki sete geçebilirsin.");
+            } else {
+                updateTimerDisplay(remain);
+            }
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+        updateTimerDisplay(0);
+    }
+
+    function updateTimerDisplay(sec) {
+        const m = Math.floor(sec / 60).toString().padStart(2, '0');
+        const s = (sec % 60).toString().padStart(2, '0');
+        document.getElementById('timeDisplay').innerText = `${m}:${s}`;
+    }
+
+    // Başlangıçta 1. günü yükle
+    loadProgress();
+</script>
+</body>
+</html>
