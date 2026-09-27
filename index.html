@@ -3,48 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kişisel Antrenman & Takip Paneli</title>
+    <title>Gelişmiş Vücut Dönüşüm & Antrenman Takip Paneli</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg: #090d16;
+            --surface: #111827;
+            --surface-card: #1f2937;
+            --surface-hover: #374151;
+            --border: #2d3748;
+            --text: #f3f4f6;
+            --text-muted: #9ca3af;
             --accent: #38bdf8;
-            --accent-hover: #0284c7;
-            --success: #22c55e;
-            --border: #334155;
+            --accent-glow: rgba(56, 189, 248, 0.25);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --purple: #a855f7;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 20px;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 20px 12px;
             display: flex;
             justify-content: center;
         }
 
-        .container {
+        .app-container {
             width: 100%;
-            max-width: 760px;
+            max-width: 900px;
         }
 
+        /* Üst Başlık */
         header {
-            margin-bottom: 24px;
             text-align: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(31, 41, 55, 0.7) 0%, rgba(17, 24, 39, 0.4) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
         }
 
         header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
+            font-size: 1.7rem;
             color: var(--accent);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
         }
 
         header p {
@@ -52,358 +65,878 @@
             font-size: 0.9rem;
         }
 
-        /* Sekmeler */
-        .day-nav {
+        /* Ana Menü Sekmeleri */
+        .main-nav {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
-        .day-btn {
-            background-color: var(--card-bg);
+        .tab-btn {
+            background-color: var(--surface);
             border: 1px solid var(--border);
             color: var(--text-muted);
-            padding: 10px 8px;
-            border-radius: 8px;
+            padding: 12px 6px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             font-size: 0.85rem;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             text-align: center;
         }
 
-        .day-btn:hover {
+        .tab-btn:hover {
             border-color: var(--accent);
-            color: var(--text-main);
+            color: var(--text);
         }
 
-        .day-btn.active {
+        .tab-btn.active {
             background-color: var(--accent);
-            color: #0f172a;
+            color: #090d16;
             border-color: var(--accent);
+            box-shadow: 0 4px 14px var(--accent-glow);
         }
 
-        /* Dinlenme Sayacı */
-        .timer-card {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
+        /* Kart Yapısı */
+        .card {
+            background-color: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
         }
 
-        .timer-info span {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        /* Form Elemanları ve Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
         }
 
-        .timer-display {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--accent);
-            letter-spacing: 1px;
-        }
-
-        .timer-buttons button {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-left: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        .timer-buttons button:hover {
-            background-color: var(--accent-hover);
-            color: #fff;
-        }
-
-        /* Egzersiz Kartları */
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-
-        .card-header {
+        .input-group {
             display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
+            flex-direction: column;
+            gap: 6px;
             margin-bottom: 12px;
         }
 
-        .card-header h3 {
-            font-size: 1.1rem;
+        .input-group label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select {
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--accent);
+        }
+
+        .action-btn {
+            background-color: var(--accent);
+            color: #090d16;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: filter 0.2s;
+        }
+
+        .action-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        /* Metrik Kutuları */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .stat-box {
+            background-color: var(--surface-card);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-box .title {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .stat-box .value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* Simülatör Tablosu */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        table th, table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        table th {
+            color: var(--text-muted);
+            font-weight: 600;
+            background-color: var(--surface-card);
+        }
+
+        table tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
         }
 
         .badge {
-            background-color: rgba(56, 189, 248, 0.1);
-            color: var(--accent);
-            padding: 4px 8px;
+            display: inline-block;
+            padding: 3px 8px;
             border-radius: 6px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
         }
 
-        .instructions {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            margin-bottom: 16px;
+        .badge-green { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge-blue { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+        .badge-orange { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+
+        /* Spor Modu ve Hafta Seçiciler */
+        .selector-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            overflow-x: auto;
+            padding-bottom: 4px;
         }
 
-        /* Set Takip Kutuları */
-        .sets-container {
+        .pill-btn {
+            background-color: var(--surface-card);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .pill-btn.active {
+            background-color: var(--surface-hover);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Egzersiz Kartları */
+        .exercise-card {
+            background-color: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .exercise-header {
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .exercise-header h4 {
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .exercise-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+            margin-bottom: 12px;
+        }
+
+        .sets-wrapper {
+            display: flex;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
-        .set-item {
+        .set-btn {
             display: flex;
             align-items: center;
             gap: 6px;
-            background-color: rgba(15, 23, 42, 0.6);
+            background: rgba(9, 13, 22, 0.7);
+            border: 1px solid var(--border);
             padding: 6px 12px;
             border-radius: 6px;
-            border: 1px solid var(--border);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
             user-select: none;
         }
 
-        .set-item input {
+        .set-btn input {
             accent-color: var(--success);
-            cursor: pointer;
         }
 
-        /* Dinlenme Günleri Paneli */
-        .rest-box {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .rest-box h2 {
-            margin-bottom: 12px;
-            color: var(--accent);
-        }
-
-        .rest-box p {
-            color: var(--text-muted);
-            max-width: 500px;
-            margin: 0 auto 20px auto;
-            line-height: 1.6;
-        }
-
-        .checklist {
-            list-style: none;
-            max-width: 400px;
-            margin: 0 auto;
-            text-align: left;
-        }
-
-        .checklist li {
-            padding: 8px 12px;
-            background: rgba(15, 23, 42, 0.5);
+        /* Zamanlayıcı Bar */
+        .timer-bar {
+            background: linear-gradient(90deg, #1f2937, #111827);
             border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .timer-time {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .timer-controls button {
+            background-color: var(--surface-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 7px 12px;
             border-radius: 6px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+
+        .timer-controls button:hover {
+            border-color: var(--accent);
+        }
+
+        /* Su Takipçisi */
+        .water-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .water-cup {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            padding: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .water-cup.filled {
+            background: var(--accent);
+            color: #090d16;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Görünürlük */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 650px) {
+            .main-nav { grid-template-columns: repeat(2, 1fr); }
+            .grid-2 { grid-template-columns: 1fr; }
+            .water-grid { grid-template-columns: repeat(4, 1fr); }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-container">
     <header>
-        <h1>Antrenman & İlerleme Takibi</h1>
-        <p>105 kg Başlangıç | Kas Koruma ve Ödem Atma Programı</p>
+        <h1>DÖNÜŞÜM & PERİYODİZASYON PANELİ</h1>
+        <p>182 cm | 16 Yaş | Güç Koruma & Yağ Yakım Matriksi</p>
     </header>
 
-    <!-- Gün Seçimi Butonları -->
-    <div class="day-nav">
-        <button class="day-btn active" onclick="switchDay(1)">1. Gün (Pzt)</button>
-        <button class="day-btn" onclick="switchDay(2)">2. Gün (Salı)</button>
-        <button class="day-btn" onclick="switchDay(3)">3. Gün (Çar)</button>
-        <button class="day-btn" onclick="switchDay(4)">4. Gün (Per)</button>
-        <button class="day-btn" onclick="switchDay(5)">5. Gün (Cum)</button>
-        <button class="day-btn" onclick="switchDay(6)">Hafta Sonu</button>
+    <!-- Ana Menü -->
+    <div class="main-nav">
+        <button class="tab-btn active" onclick="setMainTab('dashboard')">📊 Analiz & Simülatör</button>
+        <button class="tab-btn" onclick="setMainTab('workout')">🏋️ Antrenman & Modlar</button>
+        <button class="tab-btn" onclick="setMainTab('daily')">🔥 Günlük Takipçi</button>
+        <button class="tab-btn" onclick="setMainTab('nutrition')">🥗 Beslenme Rehberi</button>
     </div>
 
-    <!-- Set Arası Zamanlayıcı -->
-    <div class="timer-card" id="timerSection">
-        <div class="timer-info">
-            <span>Set Arası Dinlenme</span>
-            <div class="timer-display" id="timeDisplay">00:00</div>
-        </div>
-        <div class="timer-buttons">
-            <button onclick="startTimer(60)">60 sn</button>
-            <button onclick="startTimer(90)">90 sn</button>
-            <button onclick="stopTimer()">Durdur</button>
-        </div>
-    </div>
-
-    <!-- Antrenman Günleri İçeriği -->
-    <div id="workoutContent">
-        <!-- Egzersiz 1 -->
+    <!-- 1. SEKME: ANALİZ & KİLO PROJEKSİYON MOTORU -->
+    <div id="tab-dashboard" class="tab-content active">
         <div class="card">
-            <div class="card-header">
-                <h3>1. Masa / Koltuk Şınavı</h3>
-                <span class="badge">3 Set x 8–10 Tekrar</span>
+            <div class="card-title">Kişisel Parametreler & Anlık Kilo Girişi</div>
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Şu Anki Kilon (kg)</label>
+                    <input type="number" id="userWeight" value="105" step="0.5" min="50" max="200" onchange="runCalculations()">
+                </div>
+                <div class="input-group">
+                    <label>Boy (cm) & Yaş</label>
+                    <input type="text" value="182 cm / 16 Yaş" disabled style="opacity: 0.7;">
+                </div>
             </div>
-            <div class="instructions">
-                Ellerini sabit bir masa veya koltuk kenarına omuz genişliğinde koy. Vücudunu topuktan başa kadar düz tut. Göğsünü yüzeye yaklaştırıp kontrollü it.
-            </div>
-            <div class="sets-container">
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 1. Set</label>
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 2. Set</label>
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 3. Set</label>
-            </div>
-        </div>
+            <button class="action-btn" onclick="saveWeightLog()">Güncel Kiloyu Kaydet ve Yeniden Hesapla</button>
 
-        <!-- Egzersiz 2 -->
-        <div class="card">
-            <div class="card-header">
-                <h3>2. Sandalyeye Oturup Kalkma (Box Squat)</h3>
-                <span class="badge">3 Set x 10–12 Tekrar</span>
-            </div>
-            <div class="instructions">
-                Arkana sandalye al. Ayaklar omuz genişliğinde açık. Kalçanı sandalyeye hafifçe değdirip kontrollü ayağa kalk. Dizlerini içe bükme.
-            </div>
-            <div class="sets-container">
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 1. Set</label>
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 2. Set</label>
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 3. Set</label>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="title">Bazal Metabolizma (BMR)</div>
+                    <div class="value" id="dispBMR">2113 kcal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">Günlük Harcama (TDEE)</div>
+                    <div class="value" id="dispTDEE">2850 kcal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">Hedef Beslenme</div>
+                    <div class="value" id="dispTargetCal">2150 kcal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">Min. Protein İhtiyacı</div>
+                    <div class="value" id="dispProtein">130 gr</div>
+                </div>
             </div>
         </div>
 
-        <!-- Egzersiz 3 -->
         <div class="card">
-            <div class="card-header">
-                <h3>3. Kapı Eşiğinde Çekiş (Doorframe Row)</h3>
-                <span class="badge">3 Set x 10 Tekrar</span>
+            <div class="card-title">
+                <span>12 Haftalık İlerleme & Düşüş Simülatörü</span>
+                <span class="badge badge-blue">Dengeli Kalori Açığı</span>
             </div>
-            <div class="instructions">
-                Kapı pervazını iki elinle tut, ayaklarını yaklaştır ve geriye yaslan. Sırtını ve pazularını sıkarak göğsünü pervaza doğru çek.
-            </div>
-            <div class="sets-container">
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 1. Set</label>
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 2. Set</label>
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 3. Set</label>
-            </div>
-        </div>
-
-        <!-- Egzersiz 4 -->
-        <div class="card">
-            <div class="card-header">
-                <h3>4. Köprü Hareketi (Glute Bridge)</h3>
-                <span class="badge">3 Set x 12 Tekrar</span>
-            </div>
-            <div class="instructions">
-                Sırtüstü uzan, dizlerini büküp ayak tabanlarını yere bas. Topuklardan güç alarak kalçanı yukarı kaldır, tepe noktada kalçanı 1 saniye sık ve indir.
-            </div>
-            <div class="sets-container">
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 1. Set</label>
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 2. Set</label>
-                <label class="set-item"><input type="checkbox" onchange="saveProgress()"> 3. Set</label>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+                Bu tablo; ilk haftalardaki glikojen ve ödem tahliyesini, ardından gelen haftalık 0.8 - 1.0 kg saf yağ kaybı temposunu mevcut kilona göre dinamik hesaplar.
+            </p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hafta</th>
+                            <th>Aşama / Durum</th>
+                            <th>Tahmini Kilo</th>
+                            <th>Toplam Değişim</th>
+                            <th>Fiziksel Etki</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectionTableBody">
+                        <!-- JS ile otomatik doldurulur -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- Dinlenme Günü İçeriği -->
-    <div id="restContent" style="display: none;">
-        <div class="card rest-box">
-            <h2>Aktif Dinlenme ve Toparlanma Günü</h2>
-            <p>Bugün kasların onarılıyor ve güçleniyor. Ağır egzersiz yok, ancak vücuttaki dolaşımı ve ödem atımını sürdürmek için hedeflerini tamamla.</p>
-            <ul class="checklist">
-                <li>👟 8.000 – 10.000 adım tamamla</li>
-                <li>💧 En az 3 – 3.5 litre su iç</li>
-                <li>🍗 120 – 140 gram protein hedefine ulaş</li>
-                <li>😴 7 – 8 saat kaliteli gece uykusu</li>
-            </ul>
+    <!-- 2. SEKME: ANTRENMAN MODLARI & HAFTALIK PERİYOTLAR -->
+    <div id="tab-workout" class="tab-content">
+        <!-- Dinlenme Sayacı -->
+        <div class="timer-bar">
+            <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Set Dinlenme Sayacı</div>
+                <div class="timer-time" id="timerDisplay">00:00</div>
+            </div>
+            <div class="timer-controls">
+                <button onclick="startTimer(45)">45 sn</button>
+                <button onclick="startTimer(60)">60 sn</button>
+                <button onclick="startTimer(90)">90 sn</button>
+                <button onclick="stopTimer()" style="background: rgba(239, 68, 68, 0.2); color: var(--danger); border-color: var(--danger);">Durdur</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Spor Modunu Seç</div>
+            <div class="selector-row" id="modeSelector">
+                <button class="pill-btn active" onclick="changeMode('adapt')">🛡️ Güvenli Başlangıç (105 kg Dostu)</button>
+                <button class="pill-btn" onclick="changeMode('hyper')">💪 Kuvvet & Kas Koruma (Orta Seviye)</button>
+                <button class="pill-btn" onclick="changeMode('fatburn')">🔥 Hızlı Yağ Yakım & Kondisyon</button>
+            </div>
+
+            <div class="card-title" style="margin-top: 10px;">Program Haftası</div>
+            <div class="selector-row" id="weekSelector">
+                <button class="pill-btn active" onclick="changeWeek(1)">Hafta 1-2 (Alışma & Ödem)</button>
+                <button class="pill-btn" onclick="changeWeek(3)">Hafta 3-4 (Hacim İnşası)</button>
+                <button class="pill-btn" onclick="changeWeek(5)">Hafta 5-6 (Kuvvet Artışı)</button>
+                <button class="pill-btn" onclick="changeWeek(7)">Hafta 7-8+ (Sıkılaşma & Güç)</button>
+            </div>
+
+            <div class="card-title" style="margin-top: 10px;">Gün Seçimi</div>
+            <div class="selector-row" id="daySelector">
+                <button class="pill-btn active" onclick="changeDay(1)">1. Gün (Pzt)</button>
+                <button class="pill-btn" onclick="changeDay(2)">2. Gün (Salı - Aktif)</button>
+                <button class="pill-btn" onclick="changeDay(3)">3. Gün (Çar)</button>
+                <button class="pill-btn" onclick="changeDay(4)">4. Gün (Per - Aktif)</button>
+                <button class="pill-btn" onclick="changeDay(5)">5. Gün (Cum)</button>
+                <button class="pill-btn" onclick="changeDay(6)">Hafta Sonu</button>
+            </div>
+
+            <!-- Egzersiz Listesi Bölümü -->
+            <div id="exerciseListArea" style="margin-top: 16px;">
+                <!-- Dinamik Egzersizler JS ile Gelir -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. SEKME: GÜNLÜK KALORİ & ALIŞKANLIK TAKİPÇİSİ -->
+    <div id="tab-daily" class="tab-content">
+        <div class="card">
+            <div class="card-title">Günlük Aktivite & Tahmini Kalori Yakımı</div>
+            
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Bugünkü Adım Sayın</label>
+                    <input type="number" id="stepInput" value="8500" step="500" onchange="calculateDailyBurn()">
+                </div>
+                <div class="input-group">
+                    <label>Bugün Yapılan Antrenman</label>
+                    <select id="workoutTypeInput" onchange="calculateDailyBurn()">
+                        <option value="none">Antrenman Yapılmadı (0 kcal)</option>
+                        <option value="adapt">Güvenli Başlangıç Direnç (~220 kcal)</option>
+                        <option value="hyper">Kuvvet / Kas Koruma (~300 kcal)</option>
+                        <option value="fatburn">Metabolik Yağ Yakım Seansı (~350 kcal)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stat-grid" style="margin-top: 8px;">
+                <div class="stat-box">
+                    <div class="title">Adımdan Gelen Yakım</div>
+                    <div class="value" id="dispStepCal" style="color: var(--success);">400 kcal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">Spordan Gelen Yakım</div>
+                    <div class="value" id="dispWorkoutCal" style="color: var(--warning);">220 kcal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">Bugünkü Toplam Harcama</div>
+                    <div class="value" id="dispTotalBurn" style="color: var(--accent);">2733 kcal</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span>Günlük Su Tüketimi (Hedef: 3.2 - 3.5 Litre)</span>
+                <span id="waterCountDisp" style="font-size: 0.85rem; color: var(--accent);">0 / 3200 ml</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Her bardak 400 ml kabul edilir. İçtikçe bardağın üzerine tıkla:</p>
+            <div class="water-grid" id="waterGrid">
+                <!-- 8 Bardak JS ile eklenir -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. SEKME: BESLENME & STRATEJİ REHBERİ -->
+    <div id="tab-nutrition" class="tab-content">
+        <div class="card">
+            <div class="card-title">105 kg İçin Pratik Beslenme & Makro Dağılımı</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
+                Günde yaklaşık 2.100 - 2.200 kalori almak, açlık krizlerine girmeden haftada ~1 kilo saf yağ yakmanı ve 16 yaşındaki hormonal gelişimini eksiksiz korumanı sağlar.
+            </p>
+
+            <div class="stat-grid" style="margin-bottom: 16px;">
+                <div class="stat-box">
+                    <div class="title">Protein (Kas Koruma)</div>
+                    <div class="value" style="color: var(--accent);">130–140g</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">Yumurta, tavuk, yoğurt</div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">Kompleks Karbonhidrat</div>
+                    <div class="value" style="color: var(--warning);">180–200g</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">Yulaf, pirinç, patates</div>
+                </div>
+                <div class="stat-box">
+                    <div class="title">Sağlıklı Yağlar</div>
+                    <div class="value" style="color: var(--success);">55–65g</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">Zeytinyağı, ceviz, fıstık</div>
+                </div>
+            </div>
+
+            <div class="card-title" style="font-size: 0.95rem;">Hızlı Kaçamak & Takas Tablosu</div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Eski Alışkanlık</th>
+                            <th>Akıllı Alternatif</th>
+                            <th>Fark & Kazanç</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Şekerli Enerji İçeceği (250 kcal)</td>
+                            <td>Zero Enerji İçeceği / Sade Maden Suyu</td>
+                            <td><span class="badge badge-green">-250 kcal & 0 Şeker</span></td>
+                        </tr>
+                        <tr>
+                            <td>1 Paket Soslu Fıstık (600 kcal)</td>
+                            <td>1 Avuç Çiğ Badem / Tuzsuz Fıstık</td>
+                            <td><span class="badge badge-green">-350 kcal & Sıfır Ödem</span></td>
+                        </tr>
+                        <tr>
+                            <td>Çikolatalı Gofret (250 kcal)</td>
+                            <td>1 Elma + 1 Tatlı Kaşığı Fıstık Ezmesi</td>
+                            <td><span class="badge badge-blue">Uzun Tokluk & Düşük Glisemik</span></td>
+                        </tr>
+                        <tr>
+                            <td>Krem Peynir (Yüksek Yağ)</td>
+                            <td>Süzme Peynir veya Baharatlı Lor</td>
+                            <td><span class="badge badge-green">+12g Fazla Protein</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    let currentDay = 1;
-    let timerInterval = null;
+    // --- UYGULAMA DURUMU (STATE) ---
+    let appState = {
+        weight: parseFloat(localStorage.getItem('user_weight')) || 105.0,
+        currentMode: 'adapt',
+        currentWeek: 1,
+        currentDay: 1,
+        waterFilled: parseInt(localStorage.getItem('water_count')) || 0,
+        steps: parseInt(localStorage.getItem('user_steps')) || 8500,
+        workoutType: 'adapt'
+    };
 
-    function switchDay(day) {
-        currentDay = day;
-        
-        // Buton stillerini güncelle
-        const buttons = document.querySelectorAll('.day-btn');
-        buttons.forEach((btn, index) => {
-            btn.classList.toggle('active', index + 1 === day);
+    // --- SEKME YÖNETİMİ ---
+    function setMainTab(tabName) {
+        document.querySelectorAll('.tab-btn').forEach((b, i) => {
+            const tabs = ['dashboard', 'workout', 'daily', 'nutrition'];
+            b.classList.toggle('active', tabs[i] === tabName);
         });
 
-        // Antrenman günleri: 1 (Pzt), 3 (Çar), 5 (Cum)
-        const isWorkoutDay = (day === 1 || day === 3 || day === 5);
-        document.getElementById('workoutContent').style.display = isWorkoutDay ? 'block' : 'none';
-        document.getElementById('timerSection').style.display = isWorkoutDay ? 'flex' : 'none';
-        document.getElementById('restContent').style.display = isWorkoutDay ? 'none' : 'block';
+        document.querySelectorAll('.tab-content').forEach(c => {
+            c.classList.remove('active');
+        });
+        document.getElementById(`tab-${tabName}`).classList.add('active');
 
-        loadProgress();
+        if(tabName === 'workout') renderWorkout();
+        if(tabName === 'daily') calculateDailyBurn();
     }
 
-    // Set takibini LocalStorage üzerinde tutma
-    function saveProgress() {
-        const checkboxes = document.querySelectorAll('#workoutContent input[type="checkbox"]');
-        const state = Array.from(checkboxes).map(cb => cb.checked);
-        localStorage.setItem('workout_day_' + currentDay, JSON.stringify(state));
+    // --- ANALİZ VE MATEMATİK HESAPLAMALARI ---
+    function runCalculations() {
+        const w = parseFloat(document.getElementById('userWeight').value) || 105;
+        appState.weight = w;
+
+        // Mifflin-St Jeor (16 Yaş, Erkek, 182 cm):
+        // BMR = (10 * W) + (6.25 * 182) - (5 * 16) + 5 = (10 * W) + 1137.5 - 80 + 5 = (10 * W) + 1062.5
+        const bmr = Math.round((10 * w) + 1062.5);
+        // TDEE: 105 kg'da 8k-10k adım + genç bazal ile ortalama 1.35x katsayı
+        const tdee = Math.round(bmr * 1.35);
+        const targetCal = tdee - 650; // Sağlıklı 650 kcal açık
+        const proteinMin = Math.round(w * 1.3);
+
+        document.getElementById('dispBMR').innerText = bmr + ' kcal';
+        document.getElementById('dispTDEE').innerText = tdee + ' kcal';
+        document.getElementById('dispTargetCal').innerText = targetCal + ' kcal';
+        document.getElementById('dispProtein').innerText = proteinMin + ' gr';
+
+        renderProjections(w);
     }
 
-    function loadProgress() {
-        const checkboxes = document.querySelectorAll('#workoutContent input[type="checkbox"]');
-        const saved = JSON.parse(localStorage.getItem('workout_day_' + currentDay) || '[]');
-        checkboxes.forEach((cb, index) => {
-            cb.checked = saved[index] || false;
+    function saveWeightLog() {
+        const w = parseFloat(document.getElementById('userWeight').value) || 105;
+        localStorage.setItem('user_weight', w);
+        runCalculations();
+        alert(`Güncel kilonuz ${w} kg olarak kaydedildi ve tüm program güncellendi.`);
+    }
+
+    function renderProjections(startW) {
+        const tbody = document.getElementById('projectionTableBody');
+        tbody.innerHTML = '';
+
+        let currentW = startW;
+        const milestones = [
+            { week: 1, loss: 2.2, phase: 'Hızlı Ödem & Glikojen Boşalımı', note: 'Bilek ve yüzdeki şişkinlik iner' },
+            { week: 2, loss: 1.2, phase: 'Adaptasyon & Su Dengesi', note: 'Enerjide belirgin artış başlar' },
+            { week: 3, loss: 0.9, phase: 'Saf Yağ Yakım Fazı', note: 'Kıyafetlerde gevşeme hissedilir' },
+            { week: 4, loss: 0.9, phase: '1. Ay Sonu Dönüm Noktası', note: 'Tartıda net 5 kg eksilme' },
+            { week: 6, loss: 1.8, phase: 'Bel Çevresinde İncelme', note: 'Duruş düzelir, göbek toparlanır' },
+            { week: 8, loss: 1.8, phase: '2. Ay Sonu (Metabolik Güç)', note: 'Masa şınavları çok kolaylaşır' },
+            { week: 10, loss: 1.8, phase: 'İleri Seviye Yağ Kaybı', note: 'Kas hatları belirginleşmeye başlar' },
+            { week: 12, loss: 1.8, phase: '3. Ay Sonu Tam Dönüşüm', note: 'Toplamda ~12-14 kilo hafifleme' }
+        ];
+
+        let cumulativeLoss = 0;
+        milestones.forEach(m => {
+            cumulativeLoss += m.loss;
+            const projectedW = (startW - cumulativeLoss).toFixed(1);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${m.week}. Hafta</strong></td>
+                <td><span class="badge ${m.week <= 2 ? 'badge-orange' : (m.week <= 4 ? 'badge-blue' : 'badge-green')}">${m.phase}</span></td>
+                <td style="color: var(--accent); font-weight:700;">${projectedW} kg</td>
+                <td style="color: var(--success); font-weight:600;">-${cumulativeLoss.toFixed(1)} kg</td>
+                <td style="color: var(--text-muted); font-size:0.8rem;">${m.note}</td>
+            `;
+            tbody.appendChild(tr);
         });
     }
 
-    // Sayaç fonksiyonları
+    // --- ANTRENMAN MODLARI VE VERİLERİ ---
+    const workoutDatabase = {
+        adapt: {
+            title: "🛡️ Güvenli Başlangıç (105 kg Dostu)",
+            exercises: [
+                { name: "Masa / Koltuk Şınavı", sets: 3, reps: "8-10", desc: "Eller masada, vücut tahta gibi düz. Göğsü kontrollü indir." },
+                { name: "Sandalyeye Oturup Kalkma (Box Squat)", sets: 3, reps: "10-12", desc: "Dizleri zorlamadan kalçayı sandalyeye hafif değdirip kalk." },
+                { name: "Kapı Eşiğinde Çekiş (Row)", sets: 3, reps: "10-12", desc: "Kapı pervazını tut, geriye yaslan ve sırtını sıkarak çek." },
+                { name: "Köprü Hareketi (Glute Bridge)", sets: 3, reps: "12-15", desc: "Sırtüstü uzan, topuklardan güç alıp kalçayı tepeye sık." }
+            ]
+        },
+        hyper: {
+            title: "💪 Kuvvet & Kas Koruma (Orta Seviye)",
+            exercises: [
+                { name: "Diz Üstü veya Eğimli Dar Şınav", sets: 3, reps: "10-12", desc: "Göğüs ve arka kolu daha yoğun hedefler." },
+                { name: "Tempolu Vücut Ağırlığı Squat", sets: 3, reps: "12-15", desc: "3 saniyede yavaş in, 1 saniyede patlayıcı kalk." },
+                { name: "Kapıda Tek Kol Çekiş", sets: 3, reps: "8-10 / kol", desc: "Sırt kaslarına tek taraflı daha yüksek yük bindirir." },
+                { name: "Tek Bacak Destekli Köprü Hareketi", sets: 3, reps: "10 / bacak", desc: "Arka bacak ve kalçayı izole eder." },
+                { name: "Statik Plank (Ön Kol Üstünde)", sets: 3, reps: "25-35 sn", desc: "Gövdeyi sıkarak beli ve karın kaslarını kilitler." }
+            ]
+        },
+        fatburn: {
+            title: "🔥 Hızlı Yağ Yakım & Kondisyon",
+            exercises: [
+                { name: "Düşük Etkili Step-Jack (Zıplamasız)", sets: 3, reps: "45 sn", desc: "Eklemlere vurmadan nabzı yükselten dinamik adım." },
+                { name: "Gölge Boksu (Hafif Tempoda Yumruk)", sets: 3, reps: "60 sn", desc: "Omuzları ve nefes kapasitesini çalıştırır." },
+                { name: "Sandalyeye Squat + Parmak Ucuna Yükselme", sets: 3, reps: "15", desc: "Baldırları ve bacak dolaşımını tetikler." },
+                { name: "Duvar Oturuşu (Wall Sit)", sets: 3, reps: "30-40 sn", desc: "Bacak kaslarında statik yanma sağlar." }
+            ]
+        }
+    };
+
+    function changeMode(mode) {
+        appState.currentMode = mode;
+        updatePills('modeSelector', mode);
+        renderWorkout();
+    }
+
+    function changeWeek(wk) {
+        appState.currentWeek = wk;
+        updatePills('weekSelector', wk);
+        renderWorkout();
+    }
+
+    function changeDay(day) {
+        appState.currentDay = day;
+        updatePills('daySelector', day);
+        renderWorkout();
+    }
+
+    function updatePills(containerId, activeVal) {
+        const btns = document.getElementById(containerId).querySelectorAll('.pill-btn');
+        btns.forEach(btn => {
+            const clickAttr = btn.getAttribute('onclick');
+            btn.classList.toggle('active', clickAttr.includes(`'${activeVal}'`) || clickAttr.includes(`(${activeVal})`));
+        });
+    }
+
+    function renderWorkout() {
+        const area = document.getElementById('exerciseListArea');
+        const isWorkoutDay = (appState.currentDay === 1 || appState.currentDay === 3 || appState.currentDay === 5);
+
+        if(!isWorkoutDay) {
+            area.innerHTML = `
+                <div style="text-align: center; padding: 30px 10px; background: rgba(17, 24, 39, 0.4); border-radius: 10px; border: 1px dashed var(--border);">
+                    <h3 style="color: var(--accent); margin-bottom: 8px;">Aktif Toparlanma & Dolaşım Günü</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 450px; margin: 0 auto 16px auto;">
+                        Bugün kasların dinlenirken vücudun yağ yakımını sürdürmesi için adımlarını tamamla ve suyunu iç.
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                        <span class="badge badge-blue">👟 8.000 - 10.000 Adım</span>
+                        <span class="badge badge-green">💧 3+ Litre Su</span>
+                        <span class="badge badge-orange">🍗 130g Protein</span>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        const modeData = workoutDatabase[appState.currentMode];
+        let multiplier = appState.currentWeek >= 3 ? 1.2 : 1.0;
+
+        let html = `<div style="font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 12px; text-transform: uppercase;">${modeData.title} Planı</div>`;
+
+        modeData.exercises.forEach((ex, idx) => {
+            const setStorageKey = `set_${appState.currentMode}_w${appState.currentWeek}_d${appState.currentDay}_ex${idx}`;
+            const savedSets = JSON.parse(localStorage.getItem(setStorageKey) || '[]');
+
+            html += `
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <h4>${idx + 1}. ${ex.name}</h4>
+                        <span class="badge badge-blue">${ex.sets} Set x ${ex.reps}</span>
+                    </div>
+                    <div class="exercise-desc">${ex.desc}</div>
+                    <div class="sets-wrapper">
+            `;
+
+            for(let s = 1; s <= ex.sets; s++) {
+                const checked = savedSets[s-1] ? 'checked' : '';
+                html += `
+                    <label class="set-btn">
+                        <input type="checkbox" ${checked} onchange="toggleSet('${setStorageKey}', ${s-1}, this.checked)">
+                        ${s}. Set
+                    </label>
+                `;
+            }
+
+            html += `</div></div>`;
+        });
+
+        area.innerHTML = html;
+    }
+
+    function toggleSet(key, index, isChecked) {
+        let saved = JSON.parse(localStorage.getItem(key) || '[]');
+        saved[index] = isChecked;
+        localStorage.setItem(key, JSON.stringify(saved));
+    }
+
+    // --- SAYAÇ VE BEEP FONKSİYONU ---
+    let timerInt = null;
+
+    function playBeep() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(750, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        } catch(e) {}
+    }
+
     function startTimer(seconds) {
-        clearInterval(timerInterval);
-        let remain = seconds;
-        updateTimerDisplay(remain);
+        clearInterval(timerInt);
+        let rem = seconds;
+        updateTimerDisplay(rem);
 
-        timerInterval = setInterval(() => {
-            remain--;
-            if (remain <= 0) {
-                clearInterval(timerInterval);
+        timerInt = setInterval(() => {
+            rem--;
+            if(rem <= 0) {
+                clearInterval(timerInt);
                 updateTimerDisplay(0);
-                alert("Dinlenme süresi bitti! Sıradaki sete geçebilirsin.");
+                playBeep();
+                setTimeout(() => { alert("Dinlenme bitti! Yeni sete başlayabilirsin."); }, 100);
             } else {
-                updateTimerDisplay(remain);
+                updateTimerDisplay(rem);
             }
         }, 1000);
     }
 
     function stopTimer() {
-        clearInterval(timerInterval);
+        clearInterval(timerInt);
         updateTimerDisplay(0);
     }
 
     function updateTimerDisplay(sec) {
         const m = Math.floor(sec / 60).toString().padStart(2, '0');
         const s = (sec % 60).toString().padStart(2, '0');
-        document.getElementById('timeDisplay').innerText = `${m}:${s}`;
+        document.getElementById('timerDisplay').innerText = `${m}:${s}`;
     }
 
-    // Başlangıçta 1. günü yükle
-    loadProgress();
+    // --- GÜNLÜK KALORİ VE SU TAKİBİ ---
+    function calculateDailyBurn() {
+        const steps = parseInt(document.getElementById('stepInput').value) || 0;
+        const wType = document.getElementById('workoutTypeInput').value;
+        const w = appState.weight;
+
+        // 105 kg bir birey 10.000 adımda yaklaşık 480 kcal harcar (~0.046 kcal/adım/kg değil orantılı)
+        const stepBurn = Math.round((steps / 10000) * (w * 4.5));
+        
+        let workoutBurn = 0;
+        if(wType === 'adapt') workoutBurn = 220;
+        if(wType === 'hyper') workoutBurn = 300;
+        if(wType === 'fatburn') workoutBurn = 350;
+
+        const bmr = Math.round((10 * w) + 1062.5);
+        const total = bmr + stepBurn + workoutBurn;
+
+        document.getElementById('dispStepCal').innerText = `${stepBurn} kcal`;
+        document.getElementById('dispWorkoutCal').innerText = `${workoutBurn} kcal`;
+        document.getElementById('dispTotalBurn').innerText = `${total} kcal`;
+
+        localStorage.setItem('user_steps', steps);
+    }
+
+    function initWaterGrid() {
+        const grid = document.getElementById('waterGrid');
+        grid.innerHTML = '';
+        for(let i = 1; i <= 8; i++) {
+            const cup = document.createElement('div');
+            cup.className = `water-cup ${i <= appState.waterFilled ? 'filled' : ''}`;
+            cup.innerText = `${i * 400}ml`;
+            cup.onclick = () => toggleWater(i);
+            grid.appendChild(cup);
+        }
+        document.getElementById('waterCountDisp').innerText = `${appState.waterFilled * 400} / 3200 ml`;
+    }
+
+    function toggleWater(index) {
+        appState.waterFilled = (appState.waterFilled === index) ? index - 1 : index;
+        localStorage.setItem('water_count', appState.waterFilled);
+        initWaterGrid();
+    }
+
+    // Başlangıç Çalıştırması
+    runCalculations();
+    initWaterGrid();
+    renderWorkout();
 </script>
 </body>
 </html>
